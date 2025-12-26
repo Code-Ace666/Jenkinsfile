@@ -2,23 +2,34 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Info') {
+        stage('Build') {
             steps {
-                echo 'Repo cloned successfully'
+                echo 'Building application'
             }
         }
 
-        stage('Workspace Check') {
+        stage('Test') {
             steps {
-                sh 'pwd'
-                sh 'ls -la'
+                sh 'echo "Running tests"'
             }
         }
 
-        stage('Simple Test') {
+        stage('Deploy') {
             steps {
-                sh 'echo "Pipeline is working"'
+                sh 'echo "Deploying app"'
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'This always runs'
+        }
+        success {
+            echo 'Build SUCCESS'
+        }
+        failure {
+            echo 'Build FAILED'
         }
     }
 }
