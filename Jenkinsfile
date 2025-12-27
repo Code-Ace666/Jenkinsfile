@@ -1,15 +1,21 @@
 pipeline {
     agent any
 
-    environment {
-        ENV_NAME = "dev"
+    stages {
+        stage('Generate Artifact') {
+            steps {
+                sh '''
+                mkdir -p output
+                echo "Build number: $BUILD_NUMBER" > output/result.txt
+                date >> output/result.txt
+                '''
+            }
+        }
     }
 
-    stages {
-        stage('Show Env') {
-            steps {
-                sh 'echo Environment is $ENV_NAME'
-            }
+    post {
+        success {
+            archiveArtifacts artifacts: 'output/*.txt'
         }
     }
 }
