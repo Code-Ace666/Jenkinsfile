@@ -2,9 +2,20 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo "Building branch: ${env.BRANCH_NAME}"
+                sh '''
+                docker build -t jenkins-docker-demo .
+                '''
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh '''
+                docker rm -f demo || true
+                docker run -d -p 8085:80 --name demo jenkins-docker-demo
+                '''
             }
         }
     }
