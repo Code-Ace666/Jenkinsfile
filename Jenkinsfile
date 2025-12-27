@@ -4,16 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building...'
-            }
-        }
-
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo 'Deploying from MAIN branch'
+                echo "Building branch: ${env.BRANCH_NAME}"
             }
         }
     }
