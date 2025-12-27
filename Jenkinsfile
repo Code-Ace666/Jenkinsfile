@@ -1,45 +1,19 @@
 pipeline {
     agent any
 
-    parameters {
-        choice(
-            name: 'ENV',
-            choices: ['dev', 'prod'],
-            description: 'Select environment'
-        )
-    }
-
     stages {
         stage('Build') {
             steps {
-                echo 'Building application'
+                echo 'Building...'
             }
         }
 
-        stage('Deploy to DEV') {
+        stage('Deploy') {
             when {
-                expression { params.ENV == 'dev' }
+                branch 'main'
             }
             steps {
-                echo 'Auto deploy to DEV'
-            }
-        }
-
-        stage('Approval for PROD') {
-            when {
-                expression { params.ENV == 'prod' }
-            }
-            steps {
-                input message: 'Deploy to PROD?'
-            }
-        }
-
-        stage('Deploy to PROD') {
-            when {
-                expression { params.ENV == 'prod' }
-            }
-            steps {
-                echo 'Deploying to PROD'
+                echo 'Deploying from MAIN branch'
             }
         }
     }
