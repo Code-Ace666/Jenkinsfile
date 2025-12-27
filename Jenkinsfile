@@ -1,21 +1,19 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Generate Artifact') {
-            steps {
-                sh '''
-                mkdir -p output
-                echo "Build number: $BUILD_NUMBER" > output/result.txt
-                date >> output/result.txt
-                '''
-            }
-        }
+    parameters {
+        string(
+            name: 'ENV',
+            defaultValue: 'dev',
+            description: 'Environment name'
+        )
     }
 
-    post {
-        success {
-            archiveArtifacts artifacts: 'output/*.txt'
+    stages {
+        stage('Show Parameter') {
+            steps {
+                sh 'echo Deploying to $ENV'
+            }
         }
     }
 }
