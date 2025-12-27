@@ -2,17 +2,44 @@ pipeline {
     agent any
 
     parameters {
-        string(
+        choice(
             name: 'ENV',
-            defaultValue: 'dev',
-            description: 'Environment name'
+            choices: ['dev', 'prod'],
+            description: 'Select environment'
         )
     }
 
     stages {
-        stage('Show Parameter') {
+        stage('Build') {
             steps {
-                sh 'echo Deploying to $ENV'
+                echo 'Building application'
+            }
+        }
+
+        stage('Deploy to DEV') {
+            when {
+                expression { params.ENV == 'dev' }
+            }
+            steps {
+                echo 'Auto deploy to DEV'
+            }
+        }
+
+        stage('Approval for PROD') {
+            when {
+                expression { params.ENV == 'prod' }
+            }
+            steps {
+                input message: 'Deploy to PROD?'
+            }
+        }
+
+        stage('Deploy to PROD') {
+            when {
+                expression { params.ENV == 'prod' }
+            }
+            steps {
+                echo 'Deploying to PROD'
             }
         }
     }
